@@ -115,14 +115,14 @@ def newDrum(pos, name):
 
 def newDrum_picture(pos, name):
     drum = cv2.imread('drum.jpg')
-    cv2.imshow('yarab',drum)
+    #cv2.imshow('yarab',drum)
     alpha =0.8
     width = 100
     height = 100 
     dim = (width, height)
     # resize image
     resized = cv2.resize(drum, dim, interpolation = cv2.INTER_AREA) 
-    cv2.imshow("Resized image", resized)
+    #cv2.imshow("Resized image", resized)
     h,w,c = resized.shape
     sub=(width/2,height/2)
     res = tuple(map(lambda i, j:int (i - j), pos, sub)) 
@@ -133,9 +133,10 @@ def newDrum_picture(pos, name):
     global numDrums
     numDrums += 1
     return (name, test)
-    cv2.imshow("test", test)
+    #cv2.imshow("test", test)
 
-
+global p
+p=0
 while(1):
     now = time.time()
     fps = frameCount / (now - timeStart)
@@ -152,10 +153,14 @@ while(1):
     drums[1] = newDrum((100, 400), "hi_hat")
     drums[2] = newDrum((450, 110), "O-Hi-Hat")
     drums[3] = newDrum((100, 110), "hi_hat")
-    drums_pic = newDrum_picture((100, 110), "hi_hat")
+    #drums_pic = newDrum_picture((100, 110), "hi_hat")
     #converting frame(img i.e BGR) to HSV (hue-saturation-value)
     hsv=cv2.cvtColor(img,cv2.COLOR_BGR2HSV)
-
+    
+    if p==40:
+        cv2.imshow('im',img)
+        cv2.imwrite('omar'+str(p)+'.png', img)
+    p+=1
     #defining the range of red color
     red_lower=np.array([10, 40, 50],np.uint8)
     red_upper=np.array([40, 65, 80],np.uint8)
@@ -166,6 +171,14 @@ while(1):
     #blue_lower=np.array([95,60,94],np.uint8)
     blue_lower=np.array([70,80,100],np.uint8)
     blue_upper=np.array([163,168,209],np.uint8)
+
+    ###############################
+    #test
+    red_lower=np.array([ 0, 203 , 141] ,np.uint8)
+    red_upper=np.array([ 12 , 223 , 221],np.uint8)
+    blue_lower=np.array([105, 186 , 85],np.uint8)
+    blue_upper=np.array([125 ,206 ,165],np.uint8)
+    ###############################
 
     #finding the range of red,blue color in the image
     red=cv2.inRange(hsv, red_lower, red_upper)
