@@ -6,12 +6,10 @@ import time
 import _thread
 import wave
 import struct
-
+import simpleaudio as sa
 def playSound(name):
-    import simpleaudio as sa
-
-    wave_obj = sa.WaveObject.from_wave_file(name)
-    play_obj = wave_obj.play()
+    global wave_obj
+    play_obj = wave_obj[name].play()
 
 
     ####CRASHES ON FAST INPUT####
@@ -81,32 +79,12 @@ def detectCollision(imgA, imgB, velocity, touching, name):
         touching = True
     return touching
 
-#capturing video through webcam
-cap=cv2.VideoCapture(0)
-frameCount = 0
-timeStart = time.time()
-
-b1 = (0,0)
-b2 = (0,0)
-currentBlueVelocity = 0
-r1 = (0,0)
-r2 = (0,0)
-currentRedVelocity = 0
-
-blueAndSnare = False
-blueAndHiHat = False
-redAndSnare = False
-redAndHiHat = False
-booli  = [False for i in range(4)]
-
-numDrums = 0
-drums = [None for i in range(4)]
 def newDrum(pos, name):
     # pos = (x, y)
-    drum = cv2.circle(img,pos, 50,(0,0, 0),5)
+    drum = cv2.circle(img,pos, 50,(0,0, 0),1)
     sub=(25,0)
     res = tuple(map(lambda i, j:int (i - j), pos, sub)) 
-    cv2.putText(drum,name,res,cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0,255,0), 2)
+    #cv2.putText(drum,name,res,cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0,255,0), 2)
     blank = np.zeros(img.shape[0:2])
     drum_image = cv2.circle(blank.copy(), pos, 50, (255, 255, 255), -5)
     global numDrums
@@ -114,29 +92,59 @@ def newDrum(pos, name):
     return (name, drum_image)
 
 def newDrum_picture(pos, name):
-    drum = cv2.imread('drum.jpg')
-    #cv2.imshow('yarab',drum)
-    alpha =0.8
-    width = 100
-    height = 100 
-    dim = (width, height)
-    # resize image
-    resized = cv2.resize(drum, dim, interpolation = cv2.INTER_AREA) 
     #cv2.imshow("Resized image", resized)
+    global resized
     h,w,c = resized.shape
     sub=(width/2,height/2)
-    res = tuple(map(lambda i, j:int (i - j), pos, sub)) 
-    x,y = res
+    start = tuple(map(lambda i, j:int (i - j), pos, sub))
+    end = tuple(map(lambda i, j:int (i + j), pos, sub))
+    blank = np.zeros(img.shape[0:2])
+    drum_image = cv2.rectangle(blank.copy(), start, end, (255,255,255), -5) 
+    #if p==40:
+    #    cv2.imshow('drum',drum_image)
+    x,y = start
     test = img
     added_image = cv2.addWeighted(test[y:y+h, x:x+w,:],alpha,resized,1-alpha,0)
     test[y:y+h, x:x+w] = added_image
     global numDrums
     numDrums += 1
-    return (name, test)
+    return (name, drum_image)
     #cv2.imshow("test", test)
 
-global p
+
+drum = cv2.imread('drum.jpg')
+#cv2.imshow('yarab',drum)
+alpha =0.2
+width = 100
+height = 100 
+dim = (width, height)
+# resize image
+resized = cv2.resize(drum, dim, interpolation = cv2.INTER_AREA)
 p=0
+wave_obj={}
+wave_obj['snare.wav'] = sa.WaveObject.from_wave_file('snare.wav')
+wave_obj['hi_hat.wav'] = sa.WaveObject.from_wave_file('hi_hat.wav')
+wave_obj['O-Hi-Hat.wav'] = sa.WaveObject.from_wave_file('O-Hi-Hat.wav')
+    #capturing video through webcam
+
+
+cap=cv2.VideoCapture(0)
+frameCount = 0
+timeStart = time.time()
+b1 = (0,0)
+b2 = (0,0)
+currentBlueVelocity = 0
+r1 = (0,0)
+r2 = (0,0)
+currentRedVelocity = 0
+blueAndSnare = False
+blueAndHiHat = False
+redAndSnare = False
+redAndHiHat = False
+booli  = [False for i in range(4)]
+numDrums = 0
+drums = [None for i in range(4)]
+
 while(1):
     now = time.time()
     fps = frameCount / (now - timeStart)
@@ -144,22 +152,23 @@ while(1):
 
     _, img = cap.read()
     img = cv2.flip(img, 1)
-
+    #if p==40:
+    #       cv2.imshow('ima',img)
     # cv2.putText(img,"FPS : ",(10,100),cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0,0,0), 2)
     cv2.putText(img,"FPS: %.2f" % (fps),(10,200),cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0,0,0), 2)
 
     # Add the drums
-    drums[0] = newDrum((450, 400), "snare")
-    drums[1] = newDrum((100, 400), "hi_hat")
-    drums[2] = newDrum((450, 110), "O-Hi-Hat")
-    drums[3] = newDrum((100, 110), "hi_hat")
-    #drums_pic = newDrum_picture((100, 110), "hi_hat")
+    #drums[0] = newDrum((450, 400), "snare")
+    #drums[1] = newDrum((100, 400), "hi_hat")
+    #drums[2] = newDrum((450, 110), "O-Hi-Hat")
+    #drums[3] = newDrum((100, 110), "hi_hat")
+    
     #converting frame(img i.e BGR) to HSV (hue-saturation-value)
     hsv=cv2.cvtColor(img,cv2.COLOR_BGR2HSV)
     
-    if p==40:
-        cv2.imshow('im',img)
-        cv2.imwrite('omar'+str(p)+'.png', img)
+    #if p==40:
+    #    cv2.imshow('im',img)
+    #    cv2.imwrite('omar'+str(p)+'.png', img)
     p+=1
     #defining the range of red color
     red_lower=np.array([10, 40, 50],np.uint8)
@@ -225,9 +234,15 @@ while(1):
         cv2.putText(img,str(int(currentRedVelocity)),(70, 50),cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0,0,255), 2)
     currentRedVelocity = rVelocity
 
+    drums[0] = newDrum_picture((450, 400), "snare")
+    drums[1] = newDrum_picture((100, 400), "hi_hat")
+    drums[2] = newDrum_picture((450, 110), "O-Hi-Hat")
+    drums[3] = newDrum_picture((100, 110), "hi_hat")
 
     for i in range(len(drums)):
         # print(booli)
+        #if p==40:
+        #    cv2.imshow('imag',blueEllipse)
         booli[i] = detectCollision(blueEllipse, drums[i][1], currentBlueVelocity, booli[i], "{0}.wav".format(drums[i][0]))
         booli[i] = detectCollision(redEllipse, drums[i][1], currentRedVelocity, booli[i], "{0}.wav".format(drums[i][0]))
     # blueAndSnare = detectCollision(blueEllipse, drums[0][1], blueAndSnare, "snare.wav")
@@ -248,3 +263,4 @@ while(1):
         cap.release()
         cv2.destroyAllWindows()
         break
+
