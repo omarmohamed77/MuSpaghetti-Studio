@@ -18,7 +18,7 @@ def music_main():
     music_main.wave_obj['hi_hat.wav'] = sa.WaveObject.from_wave_file('sound_tracks/hi_hat.wav')
     music_main.wave_obj['O-Hi-Hat.wav'] = sa.WaveObject.from_wave_file('sound_tracks/O-Hi-Hat.wav')
     music_main.wave_obj['output.wav'] = sa.WaveObject.from_wave_file('sound_tracks/output.wav')
-
+   
     music_main.frameCount = 0
     music_main.timeStart = time.time()
     music_main.b1 = (0,0)
@@ -31,26 +31,19 @@ def music_main():
     music_main.booli  = [False for i in range(4)]
     music_main.numDrums = 0
     music_main.drums = [None for i in range(4)]
-    
+    music_main.background = [False for i in range(4)]
+    music_main.playorstop =1
+    music_main.pygame.init()
+    music_main.new_background_music('snare.wav',4)
+
     def playSound(name):
         play_obj = music_main.wave_obj[name].play()
 
 
-        ####CRASHES ON FAST INPUT####
-        # import pyglet
-        # player = pyglet.media.Player()
-        # src = pyglet.media.load(name)
-        # player.volume = 0.1
-        # player.queue(src)
-        # player.play()
-
-        #####VERY SLOW####
-        # import pygame.mixer
-        # pm = pygame.mixer
-        # pm.init()
-        # sound = pm.Sound(name)
-        # sound.set_volume(0.5)
-        # sound.play()
+    def new_background_music(name,pic_num):
+    global background
+    pygame.mixer.music.load(name)
+    background[pic_num-1]=True
 
     def drawEllipse(contours, text):
         if(contours == None or len(contours) == 0):
@@ -82,10 +75,11 @@ def music_main():
 
         return (center, ellipseImage)
 
-    def detectCollision(imgA, imgB, velocity, touching, name):
+    def detectCollision(imgA, imgB, velocity, touching, name, background ):
+        global playorstop
         mA = cv2.moments(imgA, False)
         mB = cv2.moments(imgB, False)
-        blank = np.zeros(music_processing.img.shape[0:2])
+        blank = np.zeros(img.shape[0:2])
         if type(imgA) == type(None) or type(imgB) == type(None):
             return
         intersection = cv2.bitwise_and(imgA, imgB)
@@ -97,13 +91,18 @@ def music_main():
             # print(area)
             if int(mA["m01"] / mA["m00"])< int(mB["m01"] / mB["m00"]):
                 if velocity > 10:
-                    _thread.start_new_thread(playSound, (name,))
+                    if background==0:
+                        _thread.start_new_thread(playSound, (name,))
+                    else:
+                        if playorstop==1:
+                            pygame.mixer.music.play(-1)
+                            playorstop=0
+                        else:
+                            pygame.mixer.music.play(0)
+                            playorstop=1
                     # playSound(name)
             touching = True
-        return touching
-
     def newDrum_picture(pos, name , drum):
-        #cv2.imshow("Resized image", resized)
         alpha =0.2
         width = 100
         height = 100 
@@ -205,8 +204,8 @@ def music_main():
         music_main.drums[3] = newDrum_picture((100, 130), "output", music_main.drum )
 
         for i in range(len(music_main.drums)):
-            music_main.booli[i] = detectCollision(blueEllipse, music_main.drums[i][1], music_main.currentBlueVelocity, music_main.booli[i], "{0}.wav".format(music_main.drums[i][0]))
-            music_main.booli[i] = detectCollision(redEllipse, music_main.drums[i][1], music_main.currentRedVelocity, music_main.booli[i], "{0}.wav".format(music_main.drums[i][0]))
+            music_main.booli[i] = detectCollision(blueEllipse, music_main.drums[i][1], music_main.currentBlueVelocity, music_main.booli[i], "{0}.wav".format(music_main.drums[i][0]),  background[i])
+            music_main.booli[i] = detectCollision(redEllipse, music_main.drums[i][1], music_main.currentRedVelocity, music_main.booli[i], "{0}.wav".format(music_main.drums[i][0]), background[i])
  
     return music_processing
     
