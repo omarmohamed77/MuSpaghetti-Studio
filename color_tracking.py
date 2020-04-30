@@ -170,29 +170,21 @@ while(1):
     #    cv2.imshow('im',img)
     #    cv2.imwrite('omar'+str(p)+'.png', img)
     p+=1
-    #defining the range of red color
-    red_lower=np.array([10, 40, 50],np.uint8)
-    red_upper=np.array([40, 65, 80],np.uint8)
-    #red_lower=np.array([130,40,130],np.uint8)
-    #red_upper=np.array([200,80,200],np.uint8)
-
-    #defining the Range of Blue color
-    #blue_lower=np.array([95,60,94],np.uint8)
-    blue_lower=np.array([70,80,100],np.uint8)
-    blue_upper=np.array([163,168,209],np.uint8)
-
     ###############################
     #test
-    red_lower=np.array([ 0, 203 , 141] ,np.uint8)
-    red_upper=np.array([ 12 , 223 , 221],np.uint8)
+    red_lower=np.array([ 0, 222 , 55] ,np.uint8)
+    red_upper=np.array([ 12 , 251 , 140],np.uint8)
     blue_lower=np.array([105, 186 , 85],np.uint8)
     blue_upper=np.array([125 ,206 ,165],np.uint8)
     ###############################
 
     #finding the range of red,blue color in the image
-    red=cv2.inRange(hsv, red_lower, red_upper)
+    red1=cv2.inRange(hsv, red_lower, red_upper)
     blue=cv2.inRange(hsv,blue_lower,blue_upper)
-
+    red_lower=np.array([ 169 , 222 , 55] ,np.uint8)
+    red_upper=np.array([ 189 , 251 , 130],np.uint8)
+    red2=cv2.inRange(hsv, red_lower, red_upper)
+    red = red1 + red2
     #Morphological transformation, Dilation
     kernal = np.ones((5 ,5), "uint8")
 
