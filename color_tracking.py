@@ -91,17 +91,19 @@ def newDrum(pos, name):
     numDrums += 1
     return (name, drum_image)
 
-def newDrum_picture(pos, name):
+def newDrum_picture(pos, name , drum ):
     #cv2.imshow("Resized image", resized)
-    global resized
+    alpha =0.2
+    width = 100
+    height = 100 
+    dim = (width, height)
+    resized = cv2.resize(drum, dim, interpolation = cv2.INTER_AREA)
     h,w,c = resized.shape
     sub=(width/2,height/2)
     start = tuple(map(lambda i, j:int (i - j), pos, sub))
     end = tuple(map(lambda i, j:int (i + j), pos, sub))
     blank = np.zeros(img.shape[0:2])
     drum_image = cv2.rectangle(blank.copy(), start, end, (255,255,255), -5) 
-    #if p==40:
-    #    cv2.imshow('drum',drum_image)
     x,y = start
     test = img
     added_image = cv2.addWeighted(test[y:y+h, x:x+w,:],alpha,resized,1-alpha,0)
@@ -109,18 +111,9 @@ def newDrum_picture(pos, name):
     global numDrums
     numDrums += 1
     return (name, drum_image)
-    #cv2.imshow("test", test)
 
 
 drum = cv2.imread('drum.jpg')
-#cv2.imshow('yarab',drum)
-alpha =0.2
-width = 100
-height = 100 
-dim = (width, height)
-# resize image
-resized = cv2.resize(drum, dim, interpolation = cv2.INTER_AREA)
-p=0
 wave_obj={}
 wave_obj['snare.wav'] = sa.WaveObject.from_wave_file('snare.wav')
 wave_obj['hi_hat.wav'] = sa.WaveObject.from_wave_file('hi_hat.wav')
@@ -152,24 +145,13 @@ while(1):
 
     _, img = cap.read()
     img = cv2.flip(img, 1)
-    #if p==40:
-    #       cv2.imshow('ima',img)
-    # cv2.putText(img,"FPS : ",(10,100),cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0,0,0), 2)
+    
     cv2.putText(img,"FPS: %.2f" % (fps),(10,200),cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0,0,0), 2)
 
-    # Add the drums
-    #drums[0] = newDrum((450, 400), "snare")
-    #drums[1] = newDrum((100, 400), "hi_hat")
-    #drums[2] = newDrum((450, 110), "O-Hi-Hat")
-    #drums[3] = newDrum((100, 110), "hi_hat")
     
     #converting frame(img i.e BGR) to HSV (hue-saturation-value)
     hsv=cv2.cvtColor(img,cv2.COLOR_BGR2HSV)
-    
-    #if p==40:
-    #    cv2.imshow('im',img)
-    #    cv2.imwrite('omar'+str(p)+'.png', img)
-    p+=1
+
     ###############################
     #test
     red_lower=np.array([ 0, 222 , 55] ,np.uint8)
@@ -225,11 +207,12 @@ while(1):
     else:
         cv2.putText(img,str(int(currentRedVelocity)),(70, 50),cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0,0,255), 2)
     currentRedVelocity = rVelocity
-
-    drums[0] = newDrum_picture((450, 400), "snare")
-    drums[1] = newDrum_picture((100, 400), "hi_hat")
-    drums[2] = newDrum_picture((450, 110), "O-Hi-Hat")
-    drums[3] = newDrum_picture((100, 110), "hi_hat")
+	
+    #Add the drums
+    drums[0] = newDrum_picture((450, 400), "snare" , drum )
+    drums[1] = newDrum_picture((100, 400), "hi_hat",  drum )
+    drums[2] = newDrum_picture((450, 110), "O-Hi-Hat", drum )
+    drums[3] = newDrum_picture((100, 110), "hi_hat", drum )
 
     for i in range(len(drums)):
         # print(booli)
@@ -237,20 +220,10 @@ while(1):
         #    cv2.imshow('imag',blueEllipse)
         booli[i] = detectCollision(blueEllipse, drums[i][1], currentBlueVelocity, booli[i], "{0}.wav".format(drums[i][0]))
         booli[i] = detectCollision(redEllipse, drums[i][1], currentRedVelocity, booli[i], "{0}.wav".format(drums[i][0]))
-    # blueAndSnare = detectCollision(blueEllipse, drums[0][1], blueAndSnare, "snare.wav")
-    # blueAndHiHat = detectCollision(blueEllipse, drums[1][1], blueAndHiHat, "hi_hat.wav")
-
-    # blueAndSnare = detectCollision(blueEllipse, snare_image, blueAndSnare, "snare.wav")
-    # blueAndHiHat = detectCollision(blueEllipse, hi_hat_image, blueAndHiHat, "Closed-Hi-Hat.wav")
-    #
-    # redAndSnare = detectCollision(redEllipse, snare_image, redAndSnare, "snare.wav")
-    # redAndHiHat = detectCollision(redEllipse, hi_hat_image, redAndHiHat, "Closed-Hi-Hat.wav")
+ 
 
 
-
-    #cv2.imshow("Redcolour",red)
     cv2.imshow("Color Tracking",img)
-    #cv2.imshow("red",res)
     if cv2.waitKey(10) & 0xFF == ord('q'):
         cap.release()
         cv2.destroyAllWindows()
