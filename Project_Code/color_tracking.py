@@ -41,9 +41,9 @@ def music_main():
 
 
     def new_background_music(name,pic_num):
-    global background
-    pygame.mixer.music.load(name)
-    background[pic_num-1]=True
+    	global background
+    	pygame.mixer.music.load(name)
+    	background[pic_num-1]=True
 
     def drawEllipse(contours, text):
         if(contours == None or len(contours) == 0):
