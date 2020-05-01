@@ -33,17 +33,15 @@ def music_main():
     music_main.drums = [None for i in range(4)]
     music_main.background = [False for i in range(4)]
     music_main.playorstop =1
-    music_main.pygame.init()
-    music_main.new_background_music('snare.wav',4)
+    pygame.init()
 
     def playSound(name):
         play_obj = music_main.wave_obj[name].play()
 
 
     def new_background_music(name,pic_num):
-    	global background
-    	pygame.mixer.music.load(name)
-    	background[pic_num-1]=True
+        pygame.mixer.music.load(name)
+        music_main.background[pic_num-1]=True
 
     def drawEllipse(contours, text):
         if(contours == None or len(contours) == 0):
@@ -76,10 +74,10 @@ def music_main():
         return (center, ellipseImage)
 
     def detectCollision(imgA, imgB, velocity, touching, name, background ):
-        global playorstop
+        music_main.playorstop
         mA = cv2.moments(imgA, False)
         mB = cv2.moments(imgB, False)
-        blank = np.zeros(img.shape[0:2])
+        blank = np.zeros(music_processing.img.shape[0:2])
         if type(imgA) == type(None) or type(imgB) == type(None):
             return
         intersection = cv2.bitwise_and(imgA, imgB)
@@ -94,12 +92,12 @@ def music_main():
                     if background==0:
                         _thread.start_new_thread(playSound, (name,))
                     else:
-                        if playorstop==1:
+                        if music_main.playorstop==1:
                             pygame.mixer.music.play(-1)
-                            playorstop=0
+                            music_main.playorstop=0
                         else:
                             pygame.mixer.music.play(0)
-                            playorstop=1
+                            music_main.playorstop=1
                     # playSound(name)
             touching = True
     def newDrum_picture(pos, name , drum):
@@ -204,8 +202,8 @@ def music_main():
         music_main.drums[3] = newDrum_picture((100, 130), "output", music_main.drum )
 
         for i in range(len(music_main.drums)):
-            music_main.booli[i] = detectCollision(blueEllipse, music_main.drums[i][1], music_main.currentBlueVelocity, music_main.booli[i], "{0}.wav".format(music_main.drums[i][0]),  background[i])
-            music_main.booli[i] = detectCollision(redEllipse, music_main.drums[i][1], music_main.currentRedVelocity, music_main.booli[i], "{0}.wav".format(music_main.drums[i][0]), background[i])
+            music_main.booli[i] = detectCollision(blueEllipse, music_main.drums[i][1], music_main.currentBlueVelocity, music_main.booli[i], "{0}.wav".format(music_main.drums[i][0]),  music_main.background[i])
+            music_main.booli[i] = detectCollision(redEllipse, music_main.drums[i][1], music_main.currentRedVelocity, music_main.booli[i], "{0}.wav".format(music_main.drums[i][0]), music_main.background[i])
  
     return music_processing
     
@@ -220,6 +218,7 @@ if __name__ == "__main__":
     cv2.namedWindow(window_name, cv2.WINDOW_NORMAL)
     # run main function
     music_processing = music_main()
+    music_main.new_background_music('snare.wav',4)
     while(camera.isOpened()):
         # get the current frame
         (grabbed, globals.main_frame) = camera.read()
@@ -240,3 +239,4 @@ if __name__ == "__main__":
     camera.release()
     cv2.destroyAllWindows()
     
+
