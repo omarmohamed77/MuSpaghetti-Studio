@@ -42,7 +42,7 @@ def music_main():
     def new_background_music(name,pic_num):
         pygame.mixer.music.load(name)
         music_main.background[pic_num-1]=True
-
+    new_background_music('sound_tracks/snare.wav',4)
     def drawEllipse(contours, text):
         if(contours == None or len(contours) == 0):
             return ((-100,-100), None)
@@ -218,7 +218,6 @@ if __name__ == "__main__":
     cv2.namedWindow(window_name, cv2.WINDOW_NORMAL)
     # run main function
     music_processing = music_main()
-    music_main.new_background_music('snare.wav',4)
     while(camera.isOpened()):
         # get the current frame
         (grabbed, globals.main_frame) = camera.read()
