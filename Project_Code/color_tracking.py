@@ -9,7 +9,7 @@ import wave
 import struct
 import simpleaudio as sa
 import globals
-
+import pygame
 
 def music_main():
     music_main.drum = cv2.imread('images/drum.jpg')
