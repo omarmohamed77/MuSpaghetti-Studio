@@ -1,9 +1,9 @@
 import cv2
 import threading
 import imutils
-import globals
-from color_tracking import *
-from recognize import *
+from source import globals
+from source.color_tracking import *
+from source.recognize import *
 
 
 def studio_main():
@@ -17,8 +17,14 @@ def studio_main():
     cv2.namedWindow(window_name, cv2.WND_PROP_FULLSCREEN)
     cv2.setWindowProperty(window_name,cv2.WND_PROP_FULLSCREEN,cv2.WINDOW_FULLSCREEN)
     # run main functions
-    sign_processing = sign_main()
-    music_processing = music_main()
+    music_data = [['snare.wav', 'drum_1.jpg', True],
+                  ['hi_hat.wav', 'drum_2.jpg', False],
+                  ['O-Hi-Hat.wav', 'drum_3.jpg', True],
+                  ['output.wav', 'drum_4.jpg', False]]
+    filename = "records/output.wav"
+    background_music = "sound_tracks/ana_gad3.mp3"
+    sign_processing = sign_main(filename, background_music)
+    music_processing = music_main(music_data)
     while(camera.isOpened()):
         # get the current frame
         (grabbed, globals.main_frame) = camera.read()
