@@ -6,7 +6,7 @@ from source.color_tracking import *
 from source.recognize import *
 
 
-def studio_main():
+def studio_main(music_data,background_music):
     # initialize global variables
     globals.initialize()
     # get the reference to the webcam
@@ -18,12 +18,12 @@ def studio_main():
     cv2.setWindowProperty(window_name,cv2.WND_PROP_FULLSCREEN,cv2.WINDOW_FULLSCREEN)
     # run main functions
     directory = ""  # set directory variable to the current path of the project 
-    music_data = [[directory+'sound_tracks/snare.wav', directory+'images/drum_1.jpg', 2],
-                  [directory+'sound_tracks/hi_hat.wav', directory+'images/drum_2.jpg', 1],
-                  [directory+'sound_tracks/O-Hi-Hat.wav', directory+'images/drum_3.jpg', 0],
-                  [directory+'sound_tracks/output.wav', directory+'images/drum_4.jpg', 0]]
+    #music_data = [[directory+'sound_tracks/snare.wav', directory+'images/drum_1.jpg', 2],
+    #              [directory+'sound_tracks/hi_hat.wav', directory+'images/drum_2.jpg', 1],
+    #              [directory+'sound_tracks/O-Hi-Hat.wav', directory+'images/drum_3.jpg', 0],
+    #              [directory+'sound_tracks/output.wav', directory+'images/drum_4.jpg', 0]]
     filename = "records/output.wav"
-    background_music = directory + "sound_tracks/ana_gad3.mp3"
+    #background_music = directory + "sound_tracks/ana_gad3.mp3"
     sign_processing = sign_main(filename, background_music)
     music_processing = music_main(music_data)
     while(camera.isOpened()):

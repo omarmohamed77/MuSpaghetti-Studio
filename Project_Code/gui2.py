@@ -7,7 +7,7 @@
 # WARNING! All changes made in this file will be lost!
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-
+from music_studio import *
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -160,6 +160,7 @@ class Ui_MainWindow(object):
         self.filePath4=None
         self.filePath4_2=None
         self.filePath_bk_music=None
+        
 
 
     def retranslateUi(self, MainWindow):
@@ -209,6 +210,8 @@ class Ui_MainWindow(object):
        
        fileDialog = QtWidgets.QFileDialog()
        fileDialog.setFileMode(QtWidgets.QFileDialog.ExistingFile)
+       fileDialog.setNameFilters(["Sound (*.wav *.mp3)", "Image (*.png *.jpg)"])
+       fileDialog.selectNameFilter("Image (*.png *.jpg)")
        if fileDialog.exec_():
             self.openedTabs += 1
             self.filePath1 = fileDialog.selectedFiles()[0]
@@ -218,6 +221,8 @@ class Ui_MainWindow(object):
        
        fileDialog = QtWidgets.QFileDialog()
        fileDialog.setFileMode(QtWidgets.QFileDialog.ExistingFile)
+       fileDialog.setNameFilters(["Sound (*.wav *.mp3)", "Image (*.png *.jpg)"])
+       fileDialog.selectNameFilter("Sound (*.wav *.mp3)")
        if fileDialog.exec_():
             self.openedTabs += 1
             self.filePath1_2 = fileDialog.selectedFiles()[0]
@@ -227,6 +232,8 @@ class Ui_MainWindow(object):
        
        fileDialog = QtWidgets.QFileDialog()
        fileDialog.setFileMode(QtWidgets.QFileDialog.ExistingFile)
+       fileDialog.setNameFilters(["Sound (*.wav *.mp3)", "Image (*.png *.jpg)"])
+       fileDialog.selectNameFilter("Image (*.png *.jpg)")
        if fileDialog.exec_():
             self.openedTabs += 1
             self.filePath2 = fileDialog.selectedFiles()[0]
@@ -236,6 +243,8 @@ class Ui_MainWindow(object):
        
        fileDialog = QtWidgets.QFileDialog()
        fileDialog.setFileMode(QtWidgets.QFileDialog.ExistingFile)
+       fileDialog.setNameFilters(["Sound (*.wav *.mp3)", "Image (*.png *.jpg)"])
+       fileDialog.selectNameFilter("Sound (*.wav *.mp3)")
        if fileDialog.exec_():
             self.openedTabs += 1
             self.filePath2_2 = fileDialog.selectedFiles()[0]
@@ -245,6 +254,8 @@ class Ui_MainWindow(object):
        
        fileDialog = QtWidgets.QFileDialog()
        fileDialog.setFileMode(QtWidgets.QFileDialog.ExistingFile)
+       fileDialog.setNameFilters(["Sound (*.wav *.mp3)", "Image (*.png *.jpg)"])
+       fileDialog.selectNameFilter("Image (*.png *.jpg)")
        if fileDialog.exec_():
             self.openedTabs += 1
             self.filePath3 = fileDialog.selectedFiles()[0]
@@ -254,6 +265,8 @@ class Ui_MainWindow(object):
        
        fileDialog = QtWidgets.QFileDialog()
        fileDialog.setFileMode(QtWidgets.QFileDialog.ExistingFile)
+       fileDialog.setNameFilters(["Sound (*.wav *.mp3)", "Image (*.png *.jpg)"])
+       fileDialog.selectNameFilter("Sound (*.wav *.mp3)")
        if fileDialog.exec_():
             self.openedTabs += 1
             self.filePath3_2 = fileDialog.selectedFiles()[0]
@@ -263,6 +276,8 @@ class Ui_MainWindow(object):
        
        fileDialog = QtWidgets.QFileDialog()
        fileDialog.setFileMode(QtWidgets.QFileDialog.ExistingFile)
+       fileDialog.setNameFilters(["Sound (*.wav *.mp3)", "Image (*.png *.jpg)"])
+       fileDialog.selectNameFilter("Image (*.png *.jpg)")
        if fileDialog.exec_():
             self.openedTabs += 1
             self.filePath4 = fileDialog.selectedFiles()[0]
@@ -272,6 +287,8 @@ class Ui_MainWindow(object):
        
        fileDialog = QtWidgets.QFileDialog()
        fileDialog.setFileMode(QtWidgets.QFileDialog.ExistingFile)
+       fileDialog.setNameFilters(["Sound (*.wav *.mp3)", "Image (*.png *.jpg)"])
+       fileDialog.selectNameFilter("Sound (*.wav *.mp3)")
        if fileDialog.exec_():
             self.openedTabs += 1
             self.filePath4_2 = fileDialog.selectedFiles()[0]
@@ -281,6 +298,8 @@ class Ui_MainWindow(object):
        
        fileDialog = QtWidgets.QFileDialog()
        fileDialog.setFileMode(QtWidgets.QFileDialog.ExistingFile)
+       fileDialog.setNameFilters(["Sound (*.wav *.mp3)", "Image (*.png *.jpg)"])
+       fileDialog.selectNameFilter("Sound (*.wav *.mp3)")
        if fileDialog.exec_():
             self.openedTabs += 1
             self.filePath_bk_music = fileDialog.selectedFiles()[0]
@@ -289,14 +308,25 @@ class Ui_MainWindow(object):
             self.error.setText("please select images/sound paths")
             self.error.setStyleSheet("color: red")
             self.error.show()
-
+            music_data = [['sound_tracks/snare.wav', 'images/drum_1.jpg', 2],
+                  ['sound_tracks/hi_hat.wav', 'images/drum_2.jpg', 1],
+                  ['sound_tracks/O-Hi-Hat.wav', 'images/drum_3.jpg', 0],
+                  ['sound_tracks/output.wav', 'images/drum_4.jpg', 0]]
+            background_music = directory + "sound_tracks/ana_gad3.mp3"
+            music_studio = studio_main(music_data)
         else:
 
-            data1 ={"path_img":self.filePath1,"path_sound":self.filePath1_2, "mode":self.comboBox_1.currentText()}
-            data2 ={"path_img":self.filePath2,"path_sound":self.filePath2_2, "mode":self.comboBox_2.currentText()}
-            data3 ={"path_img":self.filePath3,"path_sound":self.filePath3_2, "mode":self.comboBox_3.currentText()}
-            data4 ={"path_img":self.filePath4,"path_sound":self.filePath4_2, "mode":self.comboBox_4.currentText()}
-        print(data1)
+            #data1 ={"path_img":self.filePath1,"path_sound":self.filePath1_2, "mode":self.comboBox_1.currentText()}
+            #data2 ={"path_img":self.filePath2,"path_sound":self.filePath2_2, "mode":self.comboBox_2.currentText()}
+            #data3 ={"path_img":self.filePath3,"path_sound":self.filePath3_2, "mode":self.comboBox_3.currentText()}
+            #data4 ={"path_img":self.filePath4,"path_sound":self.filePath4_2, "mode":self.comboBox_4.currentText()}
+            music_data = [[ self.filePath1_2,self.filePath1, int(self.comboBox_1.currentIndex())],
+                  [self.filePath2_2,self.filePath2, int(self.comboBox_2.currentIndex())],
+                  [self.filePath3_2,self.filePath3, int(self.comboBox_3.currentIndex())],
+                  [self.filePath4_2,self.filePath4, int(self.comboBox_4.currentIndex())]]
+            background_music=self.filePath_bk_music
+            music_studio = studio_main(music_data,background_music)
+            #print(data1)
 
 if __name__ == "__main__":
     import sys
@@ -306,6 +336,7 @@ if __name__ == "__main__":
     ui.setupUi(MainWindow)
     MainWindow.show()
     sys.exit(app.exec_())
+
 
 
 
