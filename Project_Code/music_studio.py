@@ -17,7 +17,7 @@ def studio_main():
     cv2.namedWindow(window_name, cv2.WND_PROP_FULLSCREEN)
     cv2.setWindowProperty(window_name,cv2.WND_PROP_FULLSCREEN,cv2.WINDOW_FULLSCREEN)
     # run main functions
-    directory = ""  # set directory variable to the current path of the project 
+    directory = ""  # set directory variable to the current path of the project
     music_data = [[directory+'sound_tracks/snare.wav', directory+'images/drum_1.jpg', 2],
                   [directory+'sound_tracks/hi_hat.wav', directory+'images/drum_2.jpg', 1],
                   [directory+'sound_tracks/O-Hi-Hat.wav', directory+'images/drum_3.jpg', 0],
