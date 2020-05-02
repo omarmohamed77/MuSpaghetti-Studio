@@ -276,7 +276,7 @@ if __name__ == "__main__":
     window_name = "music_studio"
     cv2.namedWindow(window_name, cv2.WINDOW_NORMAL)
     # run main function
-    directory = "D:/My Files/Projects/Image Processing/CVC'20-Project/Project/"
+    directory = ""  # set directory variable to the current path of the project
     filename = "records/output.wav"
     background_music = directory + "sound_tracks/ana_gad3.mp3"
     sign_processing = sign_main(filename, background_music)
