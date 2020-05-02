@@ -125,7 +125,7 @@ def start_recording(filename):
                     rate=fs,
                     frames_per_buffer=chunk,
                     input=True,
-                    input_device_index=2)
+                    input_device_index=sign_main.dev_index)
 
     frames = []  # Initialize array to store frames
 
@@ -150,13 +150,19 @@ def start_recording(filename):
     wf.writeframes(b''.join(frames))
     wf.close()
 
-def sign_main(file_path, background_music):
+def sign_main(file_path, device_name, background_music):
     pygame.init()
     sign_main.background_music = background_music
     if background_music is not None:
         pygame.mixer.music.load(background_music)
         pygame.mixer.music.set_volume(0.7)
         
+    p = pyaudio.PyAudio()
+    for i in range(p.get_device_count()):
+        dev = p.get_device_info_by_index(i)
+        if (dev['name'] == device_name and dev['hostApi'] == 0):
+            sign_main.dev_index = dev['index'];
+            
     # recording file path
     sign_main.file_path = file_path
     
@@ -276,7 +282,7 @@ if __name__ == "__main__":
     window_name = "music_studio"
     cv2.namedWindow(window_name, cv2.WINDOW_NORMAL)
     # run main function
-    directory = ""  # set directory variable to the current path of the project
+    directory = "D:/My Files/Projects/Image Processing/CVC'20-Project/Project/"
     filename = "records/output.wav"
     background_music = directory + "sound_tracks/ana_gad3.mp3"
     sign_processing = sign_main(filename, background_music)

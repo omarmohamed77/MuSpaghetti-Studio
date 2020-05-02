@@ -23,8 +23,9 @@ def studio_main():
                   [directory+'sound_tracks/O-Hi-Hat.wav', directory+'images/drum_3.jpg', 0],
                   [directory+'sound_tracks/output.wav', directory+'images/drum_4.jpg', 0]]
     filename = "records/output.wav"
-    background_music = directory + "sound_tracks/ana_gad3.mp3"
-    sign_processing = sign_main(filename, background_music)
+    device_name = "Stereo Mix (Realtek(R) Audio)"
+    background_music = directory + "sound_tracks/ana_gad3.wav"
+    sign_processing = sign_main(filename, device_name, background_music)
     music_processing = music_main(music_data)
     while(camera.isOpened()):
         # get the current frame
