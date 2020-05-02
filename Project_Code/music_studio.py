@@ -17,12 +17,13 @@ def studio_main():
     cv2.namedWindow(window_name, cv2.WND_PROP_FULLSCREEN)
     cv2.setWindowProperty(window_name,cv2.WND_PROP_FULLSCREEN,cv2.WINDOW_FULLSCREEN)
     # run main functions
-    music_data = [['snare.wav', 'drum_1.jpg', True],
-                  ['hi_hat.wav', 'drum_2.jpg', False],
-                  ['O-Hi-Hat.wav', 'drum_3.jpg', True],
-                  ['output.wav', 'drum_4.jpg', False]]
+    directory = ""  # set directory variable to the current path of the project 
+    music_data = [[directory+'sound_tracks/snare.wav', directory+'images/drum_1.jpg', 2],
+                  [directory+'sound_tracks/hi_hat.wav', directory+'images/drum_2.jpg', 1],
+                  [directory+'sound_tracks/O-Hi-Hat.wav', directory+'images/drum_3.jpg', 0],
+                  [directory+'sound_tracks/output.wav', directory+'images/drum_4.jpg', 0]]
     filename = "records/output.wav"
-    background_music = "sound_tracks/ana_gad3.mp3"
+    background_music = directory + "sound_tracks/ana_gad3.mp3"
     sign_processing = sign_main(filename, background_music)
     music_processing = music_main(music_data)
     while(camera.isOpened()):
