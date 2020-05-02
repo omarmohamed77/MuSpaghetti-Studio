@@ -245,7 +245,7 @@ def sign_main(file_path, background_music):
                 cv2.putText(globals.main_frame, str(fingers), (150, 50), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0,255,0), 2)
                 globals.write_lock.release()                
                 # show the thresholded image
-                cv2.imshow("Thesholded", thresholded)
+                #cv2.imshow("Thresholded", thresholded)
 
         # draw the segmented hand
         globals.write_lock.acquire()
