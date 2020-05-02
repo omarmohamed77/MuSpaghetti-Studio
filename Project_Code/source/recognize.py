@@ -245,7 +245,7 @@ def sign_main(file_path, background_music):
                 cv2.putText(globals.main_frame, str(fingers), (150, 50), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0,255,0), 2)
                 globals.write_lock.release()                
                 # show the thresholded image
-                #cv2.imshow("Thesholded", thresholded)
+                cv2.imshow("Thesholded", thresholded)
 
         # draw the segmented hand
         globals.write_lock.acquire()
@@ -276,7 +276,10 @@ if __name__ == "__main__":
     window_name = "music_studio"
     cv2.namedWindow(window_name, cv2.WINDOW_NORMAL)
     # run main function
-    sign_processing = sign_main()
+    directory = "D:/My Files/Projects/Image Processing/CVC'20-Project/Project/"
+    filename = "records/output.wav"
+    background_music = directory + "sound_tracks/ana_gad3.mp3"
+    sign_processing = sign_main(filename, background_music)
     while(camera.isOpened()):
         # get the current frame
         (grabbed, globals.main_frame) = camera.read()

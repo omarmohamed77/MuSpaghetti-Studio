@@ -228,7 +228,12 @@ if __name__ == "__main__":
     window_name = "music_studio"
     cv2.namedWindow(window_name, cv2.WINDOW_NORMAL)
     # run main function
-    music_processing = music_main()
+    directory = "D:/My Files/Projects/Image Processing/CVC'20-Project/Project/"
+    music_data = [[directory+'sound_tracks/snare.wav', directory+'images/drum_1.jpg', 2],
+                  [directory+'sound_tracks/hi_hat.wav', directory+'images/drum_2.jpg', 1],
+                  [directory+'sound_tracks/O-Hi-Hat.wav', directory+'images/drum_3.jpg', 0],
+                  [directory+'sound_tracks/output.wav', directory+'images/drum_4.jpg', 0]]
+    music_processing = music_main(music_data)
     while(camera.isOpened()):
         # get the current frame
         (grabbed, globals.main_frame) = camera.read()
