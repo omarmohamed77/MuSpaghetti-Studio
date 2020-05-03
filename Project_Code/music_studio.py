@@ -17,10 +17,8 @@ def studio_main(music_data,background_music):
     cv2.namedWindow(window_name, cv2.WND_PROP_FULLSCREEN)
     cv2.setWindowProperty(window_name,cv2.WND_PROP_FULLSCREEN,cv2.WINDOW_FULLSCREEN)
     # run main functions
-    directory = ""  # set directory variable to the current path of the project
     filename = "records/output.wav"
     device_name = "Stereo Mix (Realtek(R) Audio)"
-    #background_music = directory + "sound_tracks/ana_gad3.wav"
     sign_processing = sign_main(filename, device_name, background_music)
     music_processing = music_main(music_data)
     while(camera.isOpened()):

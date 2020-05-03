@@ -113,7 +113,8 @@ def count(thresholded, segmented):
 def start_recording(filename):
     chunk = 1024  # Record in chunks of 1024 samples
     sample_format = pyaudio.paInt16  # 16 bits per sample
-    channels = 2
+    channels = sign_main.input_device['maxInputChannels']  # number of input channels
+    dev_index = sign_main.input_device['index']  # input audio device index
     fs = 44100  # Record at 44100 samples per second
 
     p = pyaudio.PyAudio()  # Create an interface to PortAudio
@@ -125,7 +126,7 @@ def start_recording(filename):
                     rate=fs,
                     frames_per_buffer=chunk,
                     input=True,
-                    input_device_index=sign_main.dev_index)
+                    input_device_index=dev_index)
 
     frames = []  # Initialize array to store frames
 
@@ -157,11 +158,11 @@ def sign_main(file_path, device_name, background_music):
         pygame.mixer.music.load(background_music)
         pygame.mixer.music.set_volume(0.7)
         
-    p = pyaudio.PyAudio()
-    for i in range(p.get_device_count()):
-        dev = p.get_device_info_by_index(i)
-        if (dev['name'] == device_name and dev['hostApi'] == 0):
-            sign_main.dev_index = dev['index'];
+    pyaudio_instance = pyaudio.PyAudio()
+    for i in range(pyaudio_instance.get_device_count()):
+        dev = pyaudio_instance.get_device_info_by_index(i)
+        if (dev['name'] == device_name and dev['hostApi'] == 0 and dev['maxOutputChannels'] == 0):
+            sign_main.input_device = dev;
             
     # recording file path
     sign_main.file_path = file_path
