@@ -1,36 +1,29 @@
 #importing modules
 import math
-import _thread
-import struct
-import simpleaudio as sa
 from collections import OrderedDict
 
-        
+
 def music_main(music_data):
     pygame.init()
     music_main.wave_obj = OrderedDict()
     music_main.sound_channel = {}
     music_main.image_obj = OrderedDict()
     image_position = [(450, 400), (100, 400), (450, 130), (100, 130)]
-    for (track, position) in zip(music_data, image_position):
+    for i, (track, position) in enumerate(zip(music_data, image_position)):
         music_main.wave_obj[track[0]] = []
         music_main.image_obj[track[1]] = []
-        for i,data in enumerate(track):
-            if i == 0:
-                if track[2] != 0:
-                    music_main.wave_obj[track[0]].append(pygame.mixer.Sound(data))
-                    music_main.wave_obj[track[0]][0].set_volume(1)
-                    if track[2] == 1:
-                        music_main.sound_channel[track[0]] = pygame.mixer.find_channel()
-                else:
-                    music_main.wave_obj[track[0]].append(sa.WaveObject.from_wave_file(data))
-            elif i == 1:
+        for j, data in enumerate(track):
+            if j == 0:
+                music_main.wave_obj[track[0]].append(pygame.mixer.Sound(data))
+                music_main.wave_obj[track[0]][0].set_volume(1)
+                music_main.sound_channel[track[0]] = pygame.mixer.Channel(i)
+            elif j == 1:
                 dim = (100, 100)
                 resized = cv2.resize(cv2.imread(data), dim, interpolation = cv2.INTER_AREA)
                 music_main.image_obj[track[1]].extend((position, resized))
             else:
                 music_main.wave_obj[track[0]].extend((data, True))
-                   
+                
     music_main.frameCount = 0
     music_main.timeStart = time.time()
     music_main.b1 = (0,0)
@@ -42,10 +35,7 @@ def music_main(music_data):
     
     music_main.booli  = [False for i in range(4)]
     music_main.drums = [None for i in range(4)]
-    
-    def playSound(name):
-        play_obj = music_main.wave_obj[name][0].play()
-    
+        
     def drawEllipse(contours, text):
         if(contours == None or len(contours) == 0):
             return ((-100,-100), None)
@@ -90,24 +80,23 @@ def music_main(music_data):
             if int(mA["m01"] / mA["m00"])< int(mB["m01"] / mB["m00"]):
                 if velocity > 10:
                     if music_main.wave_obj[name][1]==0:
-                        _thread.start_new_thread(playSound, (name,))
-                    else:
-                        if music_main.wave_obj[name][1]==1:
-                            if not (music_main.wave_obj[name][2] or music_main.sound_channel[name].get_busy()):
-                                music_main.wave_obj[name][2] = True
-                            if music_main.wave_obj[name][2]:
-                                if music_main.sound_channel[name].get_busy():
-                                    music_main.sound_channel[name].unpause()
-                                else:
-                                    music_main.sound_channel[name].play(music_main.wave_obj[name][0])
+                        music_main.sound_channel[name].play(music_main.wave_obj[name][0])
+                    elif music_main.wave_obj[name][1]==1:
+                        if not (music_main.wave_obj[name][2] or music_main.sound_channel[name].get_busy()):
+                            music_main.wave_obj[name][2] = True
+                        if music_main.wave_obj[name][2]:
+                            if music_main.sound_channel[name].get_busy():
+                                music_main.sound_channel[name].unpause()
                             else:
-                                music_main.sound_channel[name].pause()
-                        elif music_main.wave_obj[name][1]==2:
-                            if music_main.wave_obj[name][2]:
-                                music_main.wave_obj[name][0].play(-1)
-                            else:
-                                music_main.wave_obj[name][0].stop()
-                        music_main.wave_obj[name][2] = not music_main.wave_obj[name][2]
+                                music_main.sound_channel[name].play(music_main.wave_obj[name][0])
+                        else:
+                            music_main.sound_channel[name].pause()
+                    elif music_main.wave_obj[name][1]==2:
+                        if music_main.wave_obj[name][2]:
+                            music_main.sound_channel[name].play(music_main.wave_obj[name][0], -1)
+                        else:
+                            music_main.sound_channel[name].stop()
+                    music_main.wave_obj[name][2] = not music_main.wave_obj[name][2]
             touching = True
         
     def newDrum_picture(pos, name, resized):

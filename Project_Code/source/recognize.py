@@ -5,6 +5,7 @@
 # organize imports
 from sklearn.metrics import pairwise
 from threading import Thread
+import wave
 import pyaudio
 
 # global variables
@@ -223,7 +224,7 @@ def sign_main(file_path, device_name, background_music):
                         print ("start")
                         sign_main.flag=True
                         sign_main.i=0
-                        sign_processing.recording_thread = Thread(target=start_recording, args=(sign_main.file_path,))
+                        sign_processing.recording_thread = Thread(target=start_recording, args=(sign_main.file_path,), daemon=True)
                         sign_processing.recording_thread.start()
                         if sign_main.background_music is not None:
                             pygame.mixer.music.play(-1)
