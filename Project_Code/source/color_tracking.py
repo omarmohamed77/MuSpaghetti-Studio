@@ -1,15 +1,8 @@
 #importing modules
-import cv2
-import imutils
-import numpy as np
 import math
-import time
 import _thread
-import wave
 import struct
 import simpleaudio as sa
-import pygame
-import pygame.locals
 from collections import OrderedDict
 
         
@@ -27,7 +20,7 @@ def music_main(music_data):
                 if track[2] != 0:
                     music_main.wave_obj[track[0]].append(pygame.mixer.Sound(data))
                     music_main.wave_obj[track[0]][0].set_volume(1)
-                    if track[2] == 2:
+                    if track[2] == 1:
                         music_main.sound_channel[track[0]] = pygame.mixer.find_channel()
                 else:
                     music_main.wave_obj[track[0]].append(sa.WaveObject.from_wave_file(data))
@@ -100,11 +93,6 @@ def music_main(music_data):
                         _thread.start_new_thread(playSound, (name,))
                     else:
                         if music_main.wave_obj[name][1]==1:
-                            if music_main.wave_obj[name][2]:
-                                music_main.wave_obj[name][0].play(-1)
-                            else:
-                                music_main.wave_obj[name][0].stop()
-                        elif music_main.wave_obj[name][1]==2:
                             if not (music_main.wave_obj[name][2] or music_main.sound_channel[name].get_busy()):
                                 music_main.wave_obj[name][2] = True
                             if music_main.wave_obj[name][2]:
@@ -114,6 +102,11 @@ def music_main(music_data):
                                     music_main.sound_channel[name].play(music_main.wave_obj[name][0])
                             else:
                                 music_main.sound_channel[name].pause()
+                        elif music_main.wave_obj[name][1]==2:
+                            if music_main.wave_obj[name][2]:
+                                music_main.wave_obj[name][0].play(-1)
+                            else:
+                                music_main.wave_obj[name][0].stop()
                         music_main.wave_obj[name][2] = not music_main.wave_obj[name][2]
             touching = True
         
@@ -220,6 +213,7 @@ def music_main(music_data):
     
 if __name__ == "__main__":
     import globals
+    from sharedLibs import *
     # initialize global variables
     globals.initialize()
     # get the reference to the webcam
@@ -228,11 +222,10 @@ if __name__ == "__main__":
     window_name = "music_studio"
     cv2.namedWindow(window_name, cv2.WINDOW_NORMAL)
     # run main function
-    directory = ""  # set directory variable to the current path of the project
-    music_data = [[directory+'sound_tracks/snare.wav', directory+'images/drum_1.jpg', 2],
-                  [directory+'sound_tracks/hi_hat.wav', directory+'images/drum_2.jpg', 1],
-                  [directory+'sound_tracks/O-Hi-Hat.wav', directory+'images/drum_3.jpg', 0],
-                  [directory+'sound_tracks/output.wav', directory+'images/drum_4.jpg', 0]]
+    music_data = [['sound_tracks/snare.wav', 'images/drum_1.jpg', 1],
+                  ['sound_tracks/hi_hat.wav', 'images/drum_2.jpg', 2],
+                  ['sound_tracks/O-Hi-Hat.wav', 'images/drum_3.jpg', 0],
+                  ['sound_tracks/output.wav', 'images/drum_4.jpg', 0]]
     music_processing = music_main(music_data)
     while(camera.isOpened()):
         # get the current frame
@@ -255,4 +248,5 @@ if __name__ == "__main__":
     cv2.destroyAllWindows()
 else:
     from source import globals
+    from source.sharedLibs import *
     

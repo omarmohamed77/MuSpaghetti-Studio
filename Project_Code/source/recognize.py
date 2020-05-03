@@ -3,15 +3,9 @@
 #------------------------------------------------------------
 
 # organize imports
-import cv2
-import imutils
-import numpy as np
 from sklearn.metrics import pairwise
-import time
 from threading import Thread
 import pyaudio
-import wave
-import pygame
 
 # global variables
 bg = None
@@ -263,10 +257,6 @@ def sign_main(file_path, device_name, background_music):
         
         # increment the number of frames
         sign_main.num_frames += 1
-
-        # display the frame with segmented hand
-        #cv2.imshow(window_name, clone)
-        
         
     return sign_processing
             
@@ -275,6 +265,7 @@ def sign_main(file_path, device_name, background_music):
 #-----------------
 if __name__ == "__main__":
     import globals
+    from sharedLibs import *
     # initialize global variables
     globals.initialize()
     # get the reference to the webcam
@@ -283,10 +274,10 @@ if __name__ == "__main__":
     window_name = "music_studio"
     cv2.namedWindow(window_name, cv2.WINDOW_NORMAL)
     # run main function
-    directory = "D:/My Files/Projects/Image Processing/CVC'20-Project/Project/"
     filename = "records/output.wav"
-    background_music = directory + "sound_tracks/ana_gad3.mp3"
-    sign_processing = sign_main(filename, background_music)
+    background_music = "sound_tracks/ana_gad3.wav"
+    device_name = "Stereo Mix (Realtek(R) Audio)"
+    sign_processing = sign_main(filename, device_name, background_music)
     while(camera.isOpened()):
         # get the current frame
         (grabbed, globals.main_frame) = camera.read()
@@ -308,4 +299,5 @@ if __name__ == "__main__":
     cv2.destroyAllWindows()
 else:
     from source import globals
+    from source.sharedLibs import *
     

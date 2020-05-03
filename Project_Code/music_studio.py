@@ -1,9 +1,10 @@
 import cv2
 import threading
 import imutils
+import pygame
 from source import globals
-from source.color_tracking import *
-from source.recognize import *
+from source.recognize import sign_main
+from source.color_tracking import music_main
 
 
 def studio_main(music_data,background_music):
@@ -43,6 +44,7 @@ def studio_main(music_data,background_music):
         keypress = cv2.waitKey(1) & 0xFF
         # if the user pressed "q", then stop looping
         if keypress == ord("q"):
+            pygame.mixer.quit()
             break    
     # free up memory
     camera.release()
@@ -50,5 +52,10 @@ def studio_main(music_data,background_music):
 
 
 if __name__=='__main__':
-    studio_main()
+    music_data = [['sound_tracks/snare.wav', 'images/drum_1.jpg', 1],
+                  ['sound_tracks/hi_hat.wav', 'images/drum_2.jpg', 2],
+                  ['sound_tracks/O-Hi-Hat.wav', 'images/drum_3.jpg', 0],
+                  ['sound_tracks/output.wav', 'images/drum_4.jpg', 0]]
+    background_music = "sound_tracks/ana_gad3.wav"
+    studio_main(music_data,background_music)
     
