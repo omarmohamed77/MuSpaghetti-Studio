@@ -315,6 +315,10 @@ class Ui_MainWindow(object):
                   [self.filePath4_2,self.filePath4, int(self.comboBox_4.currentIndex())]]
             background_music=self.filePath_bk_music
             music_studio = studio_main(music_data,background_music)
+	    if (music_studio):
+                self.MediaPlayer = QtWidgets.QMainWindow()
+                self.outui = MediaPlayer()
+                self.MediaPlayer.show()
             #print(data1)
 
 if __name__ == "__main__":
