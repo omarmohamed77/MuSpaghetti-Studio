@@ -137,14 +137,15 @@ def start_recording(filename):
     p.terminate()
 
     print('Finished recording')
-
-    # Save the recorded data as a WAV file
-    wf = wave.open(filename, 'wb')
-    wf.setnchannels(channels)
-    wf.setsampwidth(p.get_sample_size(sample_format))
-    wf.setframerate(fs)
-    wf.writeframes(b''.join(frames))
-    wf.close()
+    
+    if not sign_main.canceled:
+        # Save the recorded data as a WAV file
+        wf = wave.open(filename, 'wb')
+        wf.setnchannels(channels)
+        wf.setsampwidth(p.get_sample_size(sample_format))
+        wf.setframerate(fs)
+        wf.writeframes(b''.join(frames))
+        wf.close()
 
 def sign_main(file_path, device_name, background_music):
     pygame.init()
@@ -176,6 +177,7 @@ def sign_main(file_path, device_name, background_music):
     sign_main.i=0
     sign_main.j=0
     sign_main.flag=False
+    sign_main.canceled=False
     
     # keep looping, until interrupted
     def sign_processing(frame):

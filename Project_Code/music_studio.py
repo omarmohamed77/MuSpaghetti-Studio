@@ -45,10 +45,16 @@ def studio_main(music_data,background_music):
         # if the user pressed "q", then stop looping
         if keypress == ord("q"):
             pygame.mixer.quit()
+            if sign_main.flag:
+                sign_main.canceled=True
+                sign_main.flag=False
+                sign_processing.recording_thread.join()
             break    
     # free up memory
     camera.release()
     cv2.destroyAllWindows()
+    # return record canceled save flag
+    return sign_main.canceled
 
 
 if __name__=='__main__':
