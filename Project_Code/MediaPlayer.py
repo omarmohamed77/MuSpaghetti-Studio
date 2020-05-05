@@ -14,7 +14,7 @@ from PyQt5.QtCore import QBasicTimer
 
 class MediaPlayer(QtWidgets.QWidget):
 
-    def __init__(self):
+    def __init__(self, filename):
         super().__init__()
         self.setObjectName("MediaPlayer")
         self.setWindowModality(QtCore.Qt.WindowModal)
@@ -84,7 +84,7 @@ class MediaPlayer(QtWidgets.QWidget):
         self.statusbar = QtWidgets.QStatusBar(self)
         self.statusbar.setObjectName("statusbar")
         
-        self.recordPath = "./records/output.wav"
+        self.recordPath = filename
         url = QtCore.QUrl.fromLocalFile(self.recordPath)
         content = QMediaContent(url)
         self.player = QMediaPlayer()
@@ -110,26 +110,33 @@ class MediaPlayer(QtWidgets.QWidget):
         
         
     def media_play(self):
-        self.player.play()
-        if not self.timer.isActive():
-            self.timer.start(round(self.player.duration()/100), self)
+        if self.player.state() != 1:
+            self.player.play()
+            if not self.timer.isActive():
+                self.timer.start(round(self.player.duration()/100), self)
         
     def media_pause(self):
-        self.player.pause()
-        if self.timer.isActive():
-            self.timer.stop()
+        if self.player.state() != 2:
+            self.player.pause()
+            if self.timer.isActive():
+                self.timer.stop()
+                self.play_button.setText("Resume")
             
     def media_stop(self):
-        self.player.stop()
-        if self.timer.isActive():
-            self.timer.stop()
+        if self.player.state() != 0:
+            self.player.stop()
+            if self.timer.isActive():
+                self.timer.stop()
             self.step = 0
             self.progressBar.setValue(0)
+            self.play_button.setText("Play")
         
     def timerEvent(self, event):
         if self.step >= 100:
             self.timer.stop()
             self.step = 0
+            if self.play_button.text() != "Play":
+                self.play_button.setText("Play")
             return
         
         self.step +=1
@@ -151,10 +158,17 @@ class MediaPlayer(QtWidgets.QWidget):
         if os.path.isfile(self.recordPath):
             os.remove(self.recordPath)
             self.close()
+            
+    def closeEvent(self, event):
+        if self.player.state() != 0:
+            self.player.stop()
+        if self.timer.isActive():
+            self.timer.stop()
                 
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
-    ui = MediaPlayer()
+    filename="./records/output.wav"
+    ui = MediaPlayer(filename)
     ui.show()
     sys.exit(app.exec_())

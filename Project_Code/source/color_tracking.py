@@ -8,7 +8,7 @@ def music_main(music_data):
     music_main.wave_obj = OrderedDict()
     music_main.sound_channel = {}
     music_main.image_obj = OrderedDict()
-    image_position = [(100, 130),(450, 130) , (100, 400),(450, 400)]
+    image_position = [(100, 130), (450, 130) , (100, 400), (450, 400)]
     for i, (track, position) in enumerate(zip(music_data, image_position)):
         music_main.wave_obj[track[0]] = []
         music_main.image_obj[track[1]] = []
