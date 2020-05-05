@@ -5,6 +5,7 @@
 # organize imports
 from sklearn.metrics import pairwise
 from threading import Thread
+import os
 import wave
 import pyaudio
 
@@ -139,6 +140,8 @@ def start_recording(filename):
     print('Finished recording')
     
     if not sign_main.canceled:
+        if os.path.isfile(filename):
+            os.remove(filename)
         # Save the recorded data as a WAV file
         wf = wave.open(filename, 'wb')
         wf.setnchannels(channels)

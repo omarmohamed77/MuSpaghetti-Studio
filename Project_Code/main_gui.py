@@ -8,8 +8,9 @@
 
 import os
 import pyaudio
+import timeit
 from PyQt5 import QtCore, QtGui, QtWidgets
-from music_studio import *
+from music_studio import studio_main
 from MediaPlayer import *
 
 class Ui_MainWindow(object):
