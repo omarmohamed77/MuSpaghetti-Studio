@@ -1,4 +1,4 @@
-# Virtual-Drums
+# MuSpaghetti Studio
 ## Description
 MuSpaghetti Studio is an application that offers the user a virtual experience of a
 musical studio through image processing and computer vision techniques. The app
