@@ -17,7 +17,7 @@ class MediaPlayer(QtWidgets.QWidget):
     def __init__(self, filename):
         super().__init__()
         self.setObjectName("MediaPlayer")
-        self.setWindowModality(QtCore.Qt.WindowModal)
+        self.setWindowModality(QtCore.Qt.ApplicationModal)
         self.resize(520, 140)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)

@@ -10,19 +10,25 @@ def music_main(music_data):
     music_main.image_obj = OrderedDict()
     image_position = [(100, 130), (450, 130) , (100, 400), (450, 400)]
     for i, (track, position) in enumerate(zip(music_data, image_position)):
-        music_main.wave_obj[track[0]] = []
-        music_main.image_obj[track[1]] = []
+        pathTail = os.path.split(track[0])[1]
+        soundName = os.path.splitext(pathTail)[0]
+        soundName += '@'+str(i+1)
+        pathTail = os.path.split(track[1])[1]
+        imageName = os.path.splitext(pathTail)[0]
+        imageName += '@'+str(i+1)
+        music_main.wave_obj[soundName] = []
+        music_main.image_obj[imageName] = []
         for j, data in enumerate(track):
             if j == 0:
-                music_main.wave_obj[track[0]].append(pygame.mixer.Sound(data))
-                music_main.wave_obj[track[0]][0].set_volume(1)
-                music_main.sound_channel[track[0]] = pygame.mixer.Channel(i)
+                music_main.wave_obj[soundName].append(pygame.mixer.Sound(data))
+                music_main.wave_obj[soundName][0].set_volume(1)
+                music_main.sound_channel[soundName] = pygame.mixer.Channel(i)
             elif j == 1:
                 dim = (100, 100)
                 resized = cv2.resize(cv2.imread(data), dim, interpolation = cv2.INTER_AREA)
-                music_main.image_obj[track[1]].extend((position, resized))
+                music_main.image_obj[imageName].extend((position, resized))
             else:
-                music_main.wave_obj[track[0]].extend((data, True))
+                music_main.wave_obj[soundName].extend((data, True))
                 
     music_main.frameCount = 0
     music_main.timeStart = time.time()

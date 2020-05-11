@@ -52,7 +52,7 @@ def studio_main(music_data, background_music, device_name, filename):
     camera.release()
     cv2.destroyAllWindows()
     # return record canceled save flag
-    return sign_main.canceled
+    return sign_main.recorded
 
 
 if __name__=='__main__':

@@ -5,7 +5,6 @@
 # organize imports
 from sklearn.metrics import pairwise
 from threading import Thread
-import os
 import wave
 import pyaudio
 
@@ -109,8 +108,11 @@ def count(thresholded, segmented):
 def start_recording(filename):
     chunk = 1024  # Record in chunks of 1024 samples
     sample_format = pyaudio.paInt16  # 16 bits per sample
-    channels = sign_main.input_device['maxInputChannels']  # number of input channels
-    dev_index = sign_main.input_device['index']  # input audio device index
+    channels = 2    # Two input channels
+    dev_index = None    # Default device index
+    if sign_main.input_device is not None:
+        channels = sign_main.input_device['maxInputChannels']  # number of input channels
+        dev_index = sign_main.input_device['index']  # input audio device index
     fs = 44100  # Record at 44100 samples per second
 
     p = pyaudio.PyAudio()  # Create an interface to PortAudio
@@ -157,11 +159,13 @@ def sign_main(file_path, device_name, background_music):
         pygame.mixer.music.load(background_music)
         pygame.mixer.music.set_volume(0.7)
         
-    pyaudio_instance = pyaudio.PyAudio()
-    for i in range(pyaudio_instance.get_device_count()):
-        dev = pyaudio_instance.get_device_info_by_index(i)
-        if (dev['name'] == device_name and dev['hostApi'] == 0 and dev['maxOutputChannels'] == 0):
-            sign_main.input_device = dev;
+    sign_main.input_device = None
+    if device_name is not None:
+        pyaudio_instance = pyaudio.PyAudio()
+        for i in range(pyaudio_instance.get_device_count()):
+            dev = pyaudio_instance.get_device_info_by_index(i)
+            if (dev['name'] == device_name and dev['hostApi'] == 0):
+                sign_main.input_device = dev;
             
     # recording file path
     sign_main.file_path = file_path
@@ -180,6 +184,7 @@ def sign_main(file_path, device_name, background_music):
     sign_main.i=0
     sign_main.j=0
     sign_main.flag=False
+    sign_main.recorded=False
     sign_main.canceled=False
     
     # keep looping, until interrupted
@@ -199,6 +204,9 @@ def sign_main(file_path, device_name, background_music):
         # so that our weighted average model gets calibrated
         if sign_main.num_frames < 30:
             run_avg(gray, sign_main.accumWeight)
+            globals.write_lock.acquire()
+            cv2.putText(globals.main_frame, "Calibrating", (250, 50), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255,255,255), 2)
+            globals.write_lock.release()
             if sign_main.num_frames == 1:
                 print("[STATUS] please wait! calibrating...")
             elif sign_main.num_frames == 29:
@@ -220,11 +228,9 @@ def sign_main(file_path, device_name, background_music):
                 
                 # count the number of fingers
                 fingers = count(thresholded, segmented)
-                #print(fingers)
+
                 if fingers==1 and  (not sign_main.flag):
                     sign_main.i=sign_main.i+1
-                    #print ("equal"+str(sign_main.i))
-                    #time.sleep(1)
                     if sign_main.i ==25:
                         print ("start")
                         sign_main.flag=True
@@ -237,8 +243,6 @@ def sign_main(file_path, device_name, background_music):
 
                 if fingers==2 and sign_main.flag:
                     sign_main.j=sign_main.j+1
-                    #print ("equal"+str(sign_main.j))
-                    #time.sleep(1)
                     if sign_main.j ==25:
                         print ("stop")
                         sign_main.flag=False
@@ -246,6 +250,7 @@ def sign_main(file_path, device_name, background_music):
                         if sign_main.background_music is not None:
                             pygame.mixer.music.stop()
                         sign_processing.recording_thread.join()
+                        sign_main.recorded=True
                         #stop function
                 
                 globals.write_lock.acquire()

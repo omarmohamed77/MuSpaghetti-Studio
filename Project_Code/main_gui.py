@@ -9,7 +9,9 @@
 import os
 import pyaudio
 import timeit
+os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"
 from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5.QtWidgets import QGraphicsOpacityEffect, QMessageBox
 from music_studio import studio_main
 from MediaPlayer import *
 
@@ -54,7 +56,7 @@ class Ui_MainWindow(object):
         self.comboBox_1.addItem("")
         self.item1.addWidget(self.comboBox_1)
         self.verticalLayoutWidget_2 = QtWidgets.QWidget(self.centralwidget)
-        self.verticalLayoutWidget_2.setGeometry(QtCore.QRect(630, 0, 184, 128))
+        self.verticalLayoutWidget_2.setGeometry(QtCore.QRect(630, 10, 184, 128))
         self.verticalLayoutWidget_2.setObjectName("verticalLayoutWidget_2")
         self.item1_2 = QtWidgets.QVBoxLayout(self.verticalLayoutWidget_2)
         self.item1_2.setContentsMargins(0, 0, 0, 0)
@@ -128,8 +130,58 @@ class Ui_MainWindow(object):
         self.comboBox_4.addItem("")
         self.comboBox_4.addItem("")
         self.item1_4.addWidget(self.comboBox_4)
-        self.start = QtWidgets.QPushButton(self.centralwidget)
-        self.start.setGeometry(QtCore.QRect(340, 180, 151, 71))
+        self.error = QtWidgets.QLabel(self.centralwidget)
+        self.error.setGeometry(QtCore.QRect(235, 50, 351, 51))
+        self.error.setAlignment(QtCore.Qt.AlignCenter)
+        font = QtGui.QFont()
+        font.setPointSize(12)
+        font.setBold(True)
+        font.setWeight(75)
+        self.error.setFont(font)
+        self.error.setText("")
+        self.error.setObjectName("error")
+        self.error.setStyleSheet("color: red")
+        self.record_name = QtWidgets.QTextEdit(self.centralwidget)
+        self.record_name.setGeometry(QtCore.QRect(285, 160, 250, 35))
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        self.record_name.setFont(font)
+        self.record_name.setOverwriteMode(True)
+        self.record_name.setObjectName("record_name")
+        self.record_name.setAlignment(QtCore.Qt.AlignCenter)
+        self.splitter = QtWidgets.QSplitter(self.centralwidget)
+        self.splitter.setGeometry(QtCore.QRect(285, 200, 250, 140))
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.splitter.sizePolicy().hasHeightForWidth())
+        self.splitter.setSizePolicy(sizePolicy)
+        self.splitter.setMinimumSize(QtCore.QSize(250, 140))
+        self.splitter.setMaximumSize(QtCore.QSize(250, 140))
+        self.splitter.setOrientation(QtCore.Qt.Vertical)
+        self.splitter.setObjectName("splitter")
+        self.comboBox_5 = QtWidgets.QComboBox(self.splitter)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.comboBox_5.sizePolicy().hasHeightForWidth())
+        self.comboBox_5.setSizePolicy(sizePolicy)
+        self.comboBox_5.setMinimumSize(QtCore.QSize(250, 31))
+        self.comboBox_5.setMaximumSize(QtCore.QSize(250, 31))
+        font = QtGui.QFont()
+        font.setPointSize(9)
+        font.setBold(False)
+        font.setWeight(50)
+        self.comboBox_5.setFont(font)
+        self.comboBox_5.setObjectName("comboBox_5")
+        self.start = QtWidgets.QPushButton(self.splitter)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.start.sizePolicy().hasHeightForWidth())
+        self.start.setSizePolicy(sizePolicy)
+        self.start.setMinimumSize(QtCore.QSize(250, 62))
+        self.start.setMaximumSize(QtCore.QSize(250, 62))
         font = QtGui.QFont()
         font.setFamily("Ubuntu Condensed")
         font.setPointSize(24)
@@ -138,52 +190,21 @@ class Ui_MainWindow(object):
         font.setWeight(75)
         self.start.setFont(font)
         self.start.setObjectName("start")
-        self.bk_music = QtWidgets.QPushButton(self.centralwidget)
-        self.bk_music.setGeometry(QtCore.QRect(340, 260, 151, 51))
-        self.bk_music.setObjectName("bk_music")
-        self.layoutWidget = QtWidgets.QWidget(self.centralwidget)
-        self.layoutWidget.setGeometry(QtCore.QRect(10, 210, 317, 61))
-        self.layoutWidget.setObjectName("layoutWidget")
-        self.verticalLayout = QtWidgets.QVBoxLayout(self.layoutWidget)
-        self.verticalLayout.setContentsMargins(0, 0, 0, 0)
-        self.verticalLayout.setObjectName("verticalLayout")
-        self.label_5 = QtWidgets.QLabel(self.layoutWidget)
+        self.playback_button = QtWidgets.QPushButton(self.splitter)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.playback_button.sizePolicy().hasHeightForWidth())
+        self.playback_button.setSizePolicy(sizePolicy)
+        self.playback_button.setMinimumSize(QtCore.QSize(250, 35))
+        self.playback_button.setMaximumSize(QtCore.QSize(250, 35))
         font = QtGui.QFont()
-        font.setPointSize(12)
+        font.setPointSize(10)
         font.setBold(True)
         font.setWeight(75)
-        self.label_5.setFont(font)
-        self.label_5.setObjectName("label_5")
-        self.verticalLayout.addWidget(self.label_5)
-        self.comboBox_5 = QtWidgets.QComboBox(self.layoutWidget)
-        self.comboBox_5.setObjectName("comboBox_5")
-        self.verticalLayout.addWidget(self.comboBox_5)
-        self.layoutWidget_2 = QtWidgets.QWidget(self.centralwidget)
-        self.layoutWidget_2.setGeometry(QtCore.QRect(530, 210, 281, 61))
-        self.layoutWidget_2.setObjectName("layoutWidget_2")
-        self.verticalLayout_2 = QtWidgets.QVBoxLayout(self.layoutWidget_2)
-        self.verticalLayout_2.setContentsMargins(0, 0, 0, 0)
-        self.verticalLayout_2.setObjectName("verticalLayout_2")
-        self.label_6 = QtWidgets.QLabel(self.layoutWidget_2)
-        font = QtGui.QFont()
-        font.setPointSize(12)
-        font.setBold(True)
-        font.setWeight(75)
-        self.label_6.setFont(font)
-        self.label_6.setObjectName("label_6")
-        self.verticalLayout_2.addWidget(self.label_6)
-        self.plainTextEdit = QtWidgets.QPlainTextEdit(self.layoutWidget_2)
-        self.plainTextEdit.setObjectName("plainTextEdit")
-        self.verticalLayout_2.addWidget(self.plainTextEdit)
-        self.error = QtWidgets.QLabel(self.centralwidget)
-        self.error.setGeometry(QtCore.QRect(270, 150, 300, 61))
-        self.error.setAlignment(QtCore.Qt.AlignCenter)
-        self.error.setObjectName("error")
+        self.playback_button.setFont(font)
+        self.playback_button.setObjectName("playback_button")
         MainWindow.setCentralWidget(self.centralwidget)
-        self.menubar = QtWidgets.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 820, 26))
-        self.menubar.setObjectName("menubar")
-        MainWindow.setMenuBar(self.menubar)
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
         self.statusbar.setObjectName("statusbar")
         MainWindow.setStatusBar(self.statusbar)
@@ -195,21 +216,41 @@ class Ui_MainWindow(object):
             if (dev['hostApi'] == 0 and dev['maxOutputChannels'] == 0):
                 self.input_devices.append(dev)
                 self.comboBox_5.addItem("")
+        
+        self.messageBox = QMessageBox()
+        self.messageBox.setIcon(QMessageBox.Question)
+        self.messageBox.setWindowTitle('MusicWindow')
+        self.messageBox.setText('Add Background Music?')
+        self.messageBox.setStandardButtons(QMessageBox.Yes|QMessageBox.No)
+        self.skipButton = self.messageBox.addButton('Skip', QMessageBox.NoRole)
+        self.closeButton = self.messageBox.addButton(QMessageBox.Close)
+        self.messageBox.setDefaultButton(self.skipButton)
+        self.closeButton.hide()
 
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
         
-        self.openedTabs = 0
-        self.filePath1='images/drum_4.jpg'
-        self.filePath1_2='sound_tracks/output.wav'
-        self.filePath2='images/drum_3.jpg'
-        self.filePath2_2='sound_tracks/O-Hi-Hat.wav'
-        self.filePath3='images/drum_2.jpg'
-        self.filePath3_2='sound_tracks/hi_hat.wav'
-        self.filePath4='images/drum_1.jpg'
-        self.filePath4_2='sound_tracks/snare.wav'
+        self.soundPaths = [None for i in range(4)]
+        self.imagePaths = [None for i in range(4)]
+        
+        if os.path.isdir("images"):
+            for i, filename in enumerate(os.listdir("images")[:4]):
+                if filename.endswith(".png") or filename.endswith(".jpg"): 
+                    self.imagePaths[i]='images/'+filename
+        
+        if os.path.isdir("sound_tracks"):
+            for j, filename in enumerate(os.listdir("sound_tracks")[:4]):
+                if filename.endswith(".wav"): 
+                    self.soundPaths[j]='sound_tracks/'+filename
+                    
+        if not os.path.isdir("records"):
+            os.mkdir("records")
+        
+        self.comboBoxes = [self.comboBox_1, self.comboBox_2,
+                           self.comboBox_3, self.comboBox_4]
         self.filePath_bk_music=None
-        self.record_path="records/output.wav"
+        self.record_path=None
+        self.playback_button.setEnabled(False)
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
@@ -238,13 +279,13 @@ class Ui_MainWindow(object):
         self.comboBox_4.setItemText(0, _translate("MainWindow", "on hit"))
         self.comboBox_4.setItemText(1, _translate("MainWindow", "pause/resume"))
         self.comboBox_4.setItemText(2, _translate("MainWindow", "on/off"))
-        self.start.setText(_translate("MainWindow", "start"))
-        self.bk_music.setText(_translate("MainWindow", "Background Music"))
-        self.label_5.setText(_translate("MainWindow", "Select Input Device:"))
-        self.label_6.setText(_translate("MainWindow", "Enter Record Name:"))
-        self.error.setText(_translate("MainWindow", "TextLabel"))
+        self.record_name.setPlaceholderText(_translate("MainWindow", "               record name"))
+        self.comboBox_5.setToolTip(_translate("MainWindow", "Select Input Device"))
+        self.start.setText(_translate("MainWindow", "Start"))
+        self.playback_button.setText(_translate("MainWindow", "PlayBack"))
         for i, device in enumerate(self.input_devices):
             self.comboBox_5.setItemText(i, _translate("MainWindow", device['name']))
+        self.record_name.textChanged.connect(self.palyback_setEnabled)
         self.item_img_1.clicked.connect(self.on_click1_img)
         self.item_sound_1.clicked.connect(self.on_click1_sound)
         self.item_img_2.clicked.connect(self.on_click2_img)
@@ -253,128 +294,128 @@ class Ui_MainWindow(object):
         self.item_sound_3.clicked.connect(self.on_click3_sound)
         self.item_img_4.clicked.connect(self.on_click4_img)
         self.item_sound_4.clicked.connect(self.on_click4_sound)
-        self.bk_music.clicked.connect(self.on_click_bk_music)
         self.start.clicked.connect(self.on_click)
-
-        self.error.hide()
-
-    def on_click1_img(self):
-       
-       fileDialog = QtWidgets.QFileDialog()
-       fileDialog.setFileMode(QtWidgets.QFileDialog.ExistingFile)
-       fileDialog.setNameFilters(["Sound (*.wav *.mp3)", "Image (*.png *.jpg)"])
-       fileDialog.selectNameFilter("Image (*.png *.jpg)")
-       if fileDialog.exec_():
-            self.openedTabs += 1
-            self.filePath1 = fileDialog.selectedFiles()[0]
-            
-    
-    def on_click1_sound(self):
-       
-       fileDialog = QtWidgets.QFileDialog()
-       fileDialog.setFileMode(QtWidgets.QFileDialog.ExistingFile)
-       fileDialog.setNameFilters(["Sound (*.wav *.mp3)", "Image (*.png *.jpg)"])
-       fileDialog.selectNameFilter("Sound (*.wav *.mp3)")
-       if fileDialog.exec_():
-            self.openedTabs += 1
-            self.filePath1_2 = fileDialog.selectedFiles()[0]
-                  
-
-    def on_click2_img(self):
-       
-       fileDialog = QtWidgets.QFileDialog()
-       fileDialog.setFileMode(QtWidgets.QFileDialog.ExistingFile)
-       fileDialog.setNameFilters(["Sound (*.wav *.mp3)", "Image (*.png *.jpg)"])
-       fileDialog.selectNameFilter("Image (*.png *.jpg)")
-       if fileDialog.exec_():
-            self.openedTabs += 1
-            self.filePath2 = fileDialog.selectedFiles()[0]
-                      
-
-    def on_click2_sound(self):
-       
-       fileDialog = QtWidgets.QFileDialog()
-       fileDialog.setFileMode(QtWidgets.QFileDialog.ExistingFile)
-       fileDialog.setNameFilters(["Sound (*.wav *.mp3)", "Image (*.png *.jpg)"])
-       fileDialog.selectNameFilter("Sound (*.wav *.mp3)")
-       if fileDialog.exec_():
-            self.openedTabs += 1
-            self.filePath2_2 = fileDialog.selectedFiles()[0]
-                    
-
-    def on_click3_img(self):
-       
-       fileDialog = QtWidgets.QFileDialog()
-       fileDialog.setFileMode(QtWidgets.QFileDialog.ExistingFile)
-       fileDialog.setNameFilters(["Sound (*.wav *.mp3)", "Image (*.png *.jpg)"])
-       fileDialog.selectNameFilter("Image (*.png *.jpg)")
-       if fileDialog.exec_():
-            self.openedTabs += 1
-            self.filePath3 = fileDialog.selectedFiles()[0]
-                   
-
-    def on_click3_sound(self):
-       
-       fileDialog = QtWidgets.QFileDialog()
-       fileDialog.setFileMode(QtWidgets.QFileDialog.ExistingFile)
-       fileDialog.setNameFilters(["Sound (*.wav *.mp3)", "Image (*.png *.jpg)"])
-       fileDialog.selectNameFilter("Sound (*.wav *.mp3)")
-       if fileDialog.exec_():
-            self.openedTabs += 1
-            self.filePath3_2 = fileDialog.selectedFiles()[0]
-             
-
-    def on_click4_img(self):
-       
-       fileDialog = QtWidgets.QFileDialog()
-       fileDialog.setFileMode(QtWidgets.QFileDialog.ExistingFile)
-       fileDialog.setNameFilters(["Sound (*.wav *.mp3)", "Image (*.png *.jpg)"])
-       fileDialog.selectNameFilter("Image (*.png *.jpg)")
-       if fileDialog.exec_():
-            self.openedTabs += 1
-            self.filePath4 = fileDialog.selectedFiles()[0]
-            
-
-    def on_click4_sound(self):
-       
-       fileDialog = QtWidgets.QFileDialog()
-       fileDialog.setFileMode(QtWidgets.QFileDialog.ExistingFile)
-       fileDialog.setNameFilters(["Sound (*.wav *.mp3)", "Image (*.png *.jpg)"])
-       fileDialog.selectNameFilter("Sound (*.wav *.mp3)")
-       if fileDialog.exec_():
-            self.openedTabs += 1
-            self.filePath4_2 = fileDialog.selectedFiles()[0]
-    
-
-    def on_click_bk_music(self):
-       
-       fileDialog = QtWidgets.QFileDialog()
-       fileDialog.setFileMode(QtWidgets.QFileDialog.ExistingFile)
-       fileDialog.setNameFilters(["Sound (*.wav *.mp3)", "Image (*.png *.jpg)"])
-       fileDialog.selectNameFilter("Sound (*.wav *.mp3)")
-       if fileDialog.exec_():
-            self.openedTabs += 1
-            self.filePath_bk_music = fileDialog.selectedFiles()[0]
-    def on_click(self):
-        if (self.filePath1==None) or (self.filePath1_2==None) or (self.filePath2==None) or (self.filePath2_2==None) or (self.filePath3==None) or (self.filePath3_2==None) or (self.filePath4==None) or (self.filePath4_2==None):
-            self.error.setText("please select images/sound paths")
-            self.error.setStyleSheet("color: red")
-            self.error.show()
-        else:
-            music_data = [[ self.filePath1_2,self.filePath1, int(self.comboBox_1.currentIndex())],
-                  [self.filePath2_2,self.filePath2, int(self.comboBox_2.currentIndex())],
-                  [self.filePath3_2,self.filePath3, int(self.comboBox_3.currentIndex())],
-                  [self.filePath4_2,self.filePath4, int(self.comboBox_4.currentIndex())]]
-            background_music=self.filePath_bk_music
-            device_name = str(self.comboBox_5.currentText())
-            filename = self.plainTextEdit.toPlainText()
-            if filename:
-                self.record_path = "records/"+filename+".wav"
-            music_studio = studio_main(music_data, background_music, device_name, self.record_path)
+        self.playback_button.clicked.connect(self.run_playback)
+        
+    def palyback_setEnabled(self):
+        self.record_path = "records/"+self.record_name.toPlainText()+".wav"
         if os.path.isfile(self.record_path):
-            if not music_studio:
-                self.outui = MediaPlayer(self.record_path)
-                self.outui.show()
+            self.playback_button.setEnabled(True)
+        else:
+            self.playback_button.setEnabled(False)
+            
+    def run_playback(self):
+        if os.path.isfile(self.record_path):
+            self.outui = MediaPlayer(self.record_path)
+            self.outui.show()
+        else:
+            self.playback_button.setEnabled(False)
+        
+    def on_click1_img(self):
+        fileDialog = QtWidgets.QFileDialog()
+        fileDialog.setFileMode(QtWidgets.QFileDialog.ExistingFile)
+        fileDialog.setNameFilters(["Image (*.png *.jpg)"])
+        if fileDialog.exec_():
+            self.imagePaths[0] = fileDialog.selectedFiles()[0]
+            
+    def on_click1_sound(self):
+        fileDialog = QtWidgets.QFileDialog()
+        fileDialog.setFileMode(QtWidgets.QFileDialog.ExistingFile)
+        fileDialog.setNameFilters(["Sound (*.wav)"])
+        if fileDialog.exec_():
+            self.soundPaths[0] = fileDialog.selectedFiles()[0]
+            
+    def on_click2_img(self):
+        fileDialog = QtWidgets.QFileDialog()
+        fileDialog.setFileMode(QtWidgets.QFileDialog.ExistingFile)
+        fileDialog.setNameFilters(["Image (*.png *.jpg)"])
+        if fileDialog.exec_():
+            self.imagePaths[1] = fileDialog.selectedFiles()[0]
+            
+    def on_click2_sound(self):
+        fileDialog = QtWidgets.QFileDialog()
+        fileDialog.setFileMode(QtWidgets.QFileDialog.ExistingFile)
+        fileDialog.setNameFilters(["Sound (*.wav)"])
+        if fileDialog.exec_():
+            self.soundPaths[1] = fileDialog.selectedFiles()[0]
+            
+    def on_click3_img(self):
+        fileDialog = QtWidgets.QFileDialog()
+        fileDialog.setFileMode(QtWidgets.QFileDialog.ExistingFile)
+        fileDialog.setNameFilters(["Image (*.png *.jpg)"])
+        if fileDialog.exec_():
+            self.imagePaths[2] = fileDialog.selectedFiles()[0]
+            
+    def on_click3_sound(self):
+        fileDialog = QtWidgets.QFileDialog()
+        fileDialog.setFileMode(QtWidgets.QFileDialog.ExistingFile)
+        fileDialog.setNameFilters(["Sound (*.wav)"])
+        if fileDialog.exec_():
+            self.soundPaths[2] = fileDialog.selectedFiles()[0]
+            
+    def on_click4_img(self):
+        fileDialog = QtWidgets.QFileDialog()
+        fileDialog.setFileMode(QtWidgets.QFileDialog.ExistingFile)
+        fileDialog.setNameFilters(["Image (*.png *.jpg)"])
+        if fileDialog.exec_():
+            self.imagePaths[3] = fileDialog.selectedFiles()[0]
+            
+    def on_click4_sound(self):
+        fileDialog = QtWidgets.QFileDialog()
+        fileDialog.setFileMode(QtWidgets.QFileDialog.ExistingFile)
+        fileDialog.setNameFilters(["Sound (*.wav)"])
+        if fileDialog.exec_():
+            self.soundPaths[3] = fileDialog.selectedFiles()[0]
+            
+    def setFade(self, widget, flag):
+        self.effect = QGraphicsOpacityEffect()
+        widget.setGraphicsEffect(self.effect)
+        self.animation = QtCore.QPropertyAnimation(self.effect, b"opacity")
+        self.animation.setDuration(3000)
+        self.animation.setStartValue(flag)
+        self.animation.setEndValue(not flag)
+        self.animation.start()
+    
+    def on_click_bk_music(self):
+        fileDialog = QtWidgets.QFileDialog()
+        fileDialog.setFileMode(QtWidgets.QFileDialog.ExistingFile)
+        fileDialog.setNameFilters(["Sound (*.wav *.mp3)"])
+        if fileDialog.exec_():
+            self.filePath_bk_music = fileDialog.selectedFiles()[0]
+            
+    def display_error(self, error_message):
+        self.error.setText(error_message)
+        self.setFade(self.error, 0)
+        self.setFade(self.error, 1)
+            
+    def on_click(self):
+        if (None in self.imagePaths or None in self.soundPaths):
+            self.display_error("Please select images/sound paths")
+        elif not self.record_name.toPlainText():
+            self.display_error("Please enter record name")
+        else:
+            reply = self.messageBox.exec_()
+            if reply == QMessageBox.Yes:
+                self.on_click_bk_music()
+            elif reply == QMessageBox.No:
+                self.filePath_bk_music=None
+            if reply != QMessageBox.Close:
+                music_data = []
+                for i in range(4):
+                    music_data.append([self.soundPaths[i], self.imagePaths[i], int(self.comboBoxes[i].currentIndex())])
+                background_music=self.filePath_bk_music
+                device_name = None
+                if self.comboBox_5.count() > 0:
+                    device_name = str(self.comboBox_5.currentText())
+                filename = self.record_name.toPlainText()
+                self.record_path = "records/"+filename+".wav"
+                music_studio = studio_main(music_data, background_music, device_name, self.record_path)
+                if os.path.isfile(self.record_path):
+                    if music_studio:
+                        self.outui = MediaPlayer(self.record_path)
+                        self.outui.show()
+                        if not self.playback_button.isEnabled():
+                            self.playback_button.setEnabled(True)
 
 if __name__ == "__main__":
     import sys
