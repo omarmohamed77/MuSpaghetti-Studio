@@ -15,7 +15,7 @@ Second option is On Hit (i.e. the tool produces the assigned sound only on being
 Last option is Pause/Resume (Similar to ON/OFF but just continue the sound where you left off)
 The user also is able import a full sound track to run in the
 background with his own remix .
-Once starting the video capturing, the app control is switched to the Hand Gestures ,
+Once starting the video capturing, the app control is switched to the Hand Gestures,
 the user can test the instruments sounds until he/she gives the hand sign of record
 starting. The GUI keeps recording the played music until the user gives the stop
 recording sign, When the camera is turned off, user is switched back to the GUI to playback
@@ -23,11 +23,12 @@ the recorded sound track and decide whether to save or delete it as he/she wishe
 
 ## Usage
 Download .exe file 
-https://github.com/omarnagah/MuSpaghetti-Studio/releases
+https://github.com/omarnagah/MuSpaghetti-Studio/releases.
 Install the app and Start main_gui file.
 Press Start to Open the Camera and Play on Drums.
+Use RED and BLUE Sticks to hit on drums.
 To Start Recording lift 1 finger in Green rectangle on the Right.
-To Stop Recording lift 1 fingers
+To Stop Recording lift 2 fingers.
 To Exit press q.
 
 ## Demo
