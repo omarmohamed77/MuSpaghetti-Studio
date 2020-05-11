@@ -1,6 +1,6 @@
 # MuSpaghetti Studio
 ## Description
-MuSpaghetti Studio offers the user a virtual experience of a musical studio through image processing and computer vision techniques.
+MuSpaghetti Studio offers the user a virtual experience of a musical studio through image processing and computer vision techniques.  
 The app uses the front-facing camera of the hosting device to start a real time video capturing
 where the user is surrounded with a number of virtual different musical instruments.
 The user can interface virtually with these instruments by hitting them with a tracked object(stick) to produce
