@@ -6,7 +6,7 @@ print('\navailable devices:')
 
 for i in range(pyaudio_instance.get_device_count()):
     dev = pyaudio_instance.get_device_info_by_index(i)
-    if (dev['hostApi'] == 0 ):
+    if (dev['hostApi'] == 0 and dev['maxOutputChannels'] == 0):
         print(i, dev['name'], dev['maxInputChannels'])
 
 print('\ndefault input & output device:')
