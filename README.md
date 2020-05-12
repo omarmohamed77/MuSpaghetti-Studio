@@ -17,4 +17,4 @@ To Stop Recording lift 2 fingers.
 To Exit press q.
 
 ## Demo
-Link on youtube: [CVC'20 | MuSpaghetti-Studio | SA TEAM](https://www.youtube.com/watch?v=qwyO10KqQKY)
+Link on youtube: [CVC'20 | MuSpaghetti-Studio | SA TEAM](https://youtu.be/hGqHekZD6Kk)
