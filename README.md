@@ -18,3 +18,8 @@ To Exit press q.
 
 ## Demo
 Link on youtube: [CVC'20 | MuSpaghetti-Studio | SA TEAM](https://youtu.be/hGqHekZD6Kk)
+
+## Members 
+Omar magdy imam 
+Omar mohamed ibrahim  
+Omar nagah sayed
