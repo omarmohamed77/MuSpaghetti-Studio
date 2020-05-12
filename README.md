@@ -20,6 +20,6 @@ To Exit press q.
 Link on youtube: [CVC'20 | MuSpaghetti-Studio | SA TEAM](https://youtu.be/hGqHekZD6Kk)
 
 ## Members 
-Omar magdy imam 
 Omar mohamed ibrahim  
-Omar nagah sayed
+Omar nagah sayed                                                                                                                         
+Omar magdy imam
