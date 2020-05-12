@@ -135,19 +135,19 @@ def music_main(music_data):
         #converting frame(img i.e BGR) to HSV (hue-saturation-value)
         hsv=cv2.cvtColor(img,cv2.COLOR_BGR2HSV)
 
-        ###############################
-        #test
+        ###############################red[168 204 132] [188 224 212]
+        #test######blue[ 95 209  82] [115 229 162] [ 96 191  79] [116 211 159]
         red_lower=np.array([ 0, 222 , 55] ,np.uint8)
         red_upper=np.array([ 12 , 251 , 140],np.uint8)
-        blue_lower=np.array([105, 186 , 85],np.uint8)
-        blue_upper=np.array([125 ,206 ,165],np.uint8)
+        blue_lower=np.array([95, 191 , 80],np.uint8)
+        blue_upper=np.array([115 ,229 ,162],np.uint8)
         ###############################
 
         #finding the range of red,blue color in the image
         red1=cv2.inRange(hsv, red_lower, red_upper)
         blue=cv2.inRange(hsv,blue_lower,blue_upper)
-        red_lower=np.array([ 169 , 222 , 55] ,np.uint8)
-        red_upper=np.array([ 189 , 251 , 130],np.uint8)
+        red_lower=np.array([ 168 , 204 , 132] ,np.uint8)
+        red_upper=np.array([ 189 , 230 , 212],np.uint8)
         red2=cv2.inRange(hsv, red_lower, red_upper)
         red = red1 + red2
         #Morphological transformation, Dilation
